@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project.MVC", "Project.MVC\Project.MVC.csproj", "{605AA6C4-7AA6-4D8F-9EB0-880E3DF8CD6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project.Service", "Project.Service\Project.Service.csproj", "{BAC1F464-ACC6-4D81-94BC-998FEC5A6864}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{605AA6C4-7AA6-4D8F-9EB0-880E3DF8CD6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{605AA6C4-7AA6-4D8F-9EB0-880E3DF8CD6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{605AA6C4-7AA6-4D8F-9EB0-880E3DF8CD6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{605AA6C4-7AA6-4D8F-9EB0-880E3DF8CD6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAC1F464-ACC6-4D81-94BC-998FEC5A6864}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAC1F464-ACC6-4D81-94BC-998FEC5A6864}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAC1F464-ACC6-4D81-94BC-998FEC5A6864}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAC1F464-ACC6-4D81-94BC-998FEC5A6864}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
