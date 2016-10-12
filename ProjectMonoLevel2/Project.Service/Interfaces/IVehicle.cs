@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Project.Service.Models;
+using PagedList;
 
 namespace Project.Service.Interfaces
 {
@@ -17,5 +18,7 @@ namespace Project.Service.Interfaces
         VehicleModel FindVehicleModelById(int id);
         void UpdateVehicleModel(VehicleModel vehicleModel);
         void DeleteVehicleModel(int id);
+        IPagedList<VehicleMake> GetSearchSortVehicleMake(string searchBy,string searchString, int? page, int pageSize, string sortBy);
+        IPagedList<VehicleModel> GetSearchSortVehicleModel(string searchBy, string searchString, int? page, int pageSize, string sortBy);
     }
 }

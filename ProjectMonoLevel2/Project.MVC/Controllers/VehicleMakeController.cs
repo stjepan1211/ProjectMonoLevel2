@@ -15,11 +15,23 @@ namespace Project.MVC.Controllers
     public class VehicleMakeController : Controller
     {
         private VehicleService db = new VehicleService();
+        private const int PageSize = 4;
         // GET: VehicleMake
-        public ActionResult Index()
+        public ActionResult Index(string searchBy, string searchString, int? page, string sortBy)
         {
+            //object for populate list with all vehicle makers
             VehicleMakeBusinessLayer vmkbl = new VehicleMakeBusinessLayer();
-            return View(vmkbl.GetVehicleMakes());
+            ViewBag.SortName = string.IsNullOrEmpty(sortBy) ? "Name desc" : "";
+            ViewBag.SortAbrv = sortBy == "Abrv" ? "Abrv desc" : "Abrv";
+
+            if (searchString == null)
+            {
+                return View(vmkbl.GetVehicleMakesPagedSorted(page, PageSize,sortBy));
+            }
+            else
+            {
+                return View(db.GetSearchSortVehicleMake(searchBy, searchString, page, PageSize, sortBy));
+            }   
         }
 
         // GET: VehicleMake/Details/5

@@ -17,10 +17,22 @@ namespace Project.MVC.Controllers
         VehicleService db = new VehicleService();
         VehicleModelBusinessLayer vmdbl = new VehicleModelBusinessLayer();
         VehicleMakeBusinessLayer vmkbl = new VehicleMakeBusinessLayer();
+        private const int PageSize = 4;
         // GET: VehicleModel
-        public ActionResult Index()
+        public ActionResult Index(string searchBy, string searchString, int? page, string sortBy)
         {
-            return View(vmdbl.GetVehicleModels());
+            ViewBag.SortMaker = string.IsNullOrEmpty(sortBy) ? "Maker desc" : "";
+            ViewBag.SortModel = sortBy == "Model" ? "Model desc" : "Model";
+            ViewBag.SortAbrv = sortBy == "Abrv" ? "Abrv desc" : "Abrv";
+            
+            if (searchBy == null)
+            {
+                return View(vmdbl.GetVehicleModelsPagedSorted(page, PageSize, sortBy));
+            }
+            else
+            {  
+                return View(db.GetSearchSortVehicleModel(searchBy, searchString, page, PageSize, sortBy));
+            }
         }
 
         // GET: VehicleModel/Details/5

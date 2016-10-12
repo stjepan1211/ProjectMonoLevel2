@@ -1,39 +1,64 @@
-﻿@model IEnumerable<Project.Service.Models.VehicleMake>
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+@model IPagedList<Project.Service.Models.VehicleMake>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>VehicleMakers</h2>
+<h2>Vehicle Makers</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+<p>
+    @using (Html.BeginForm("Index","VehicleMake", FormMethod.Get))
+    {
+        <b>Search by:</b>
+        @Html.RadioButton("searchBy", "Name", true) <text>Name</text>
+        @Html.RadioButton("searchBy", "Abrv") <text>Abrv</text> <br />
+        @Html.TextBox("searchString") <input type="submit" value="Search" />
+    }
+</p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.ActionLink("Name","Index", new { sortBy = ViewBag.SortName, searchBy = Request.QueryString["searchBy"],
+           searchString = Request.QueryString["searchString"]})
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Abrv)
+            @Html.ActionLink("Abrv", "Index", new{sortBy = ViewBag.SortAbrv, searchBy = Request.QueryString["searchBy"],
+           searchString = Request.QueryString["searchString"]})
         </th>
-        <th></th>
+        <th>Edit, Details and Delete</th>
     </tr>
-
-@foreach (var item in Model) {
+@if (Model.Count() == 0)
+{
     <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Abrv)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.VehicleMakeId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.VehicleMakeId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.VehicleMakeId })
-        </td>
+        <td colspan="4">There are no searched parameters.</td>
     </tr>
 }
-
+else
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Abrv)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.VehicleMakeId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.VehicleMakeId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.VehicleMakeId })
+            </td>
+        </tr>
+    }
+}
 </table>
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchBy = Request.QueryString["searchBy"],searchString = Request.QueryString["searchString"],
+sortBy = Request["sortBy"]}),
+    new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true, DisplayItemSliceAndTotal = true})
