@@ -8,7 +8,7 @@ using PagedList;
 
 namespace Project.Service.Interfaces
 {
-    public interface IVehicle
+    public interface IVehicleService
     {
         void CreateVehicleMake(VehicleMake vehicleMake);
         void UpdateVehicleMake(VehicleMake vehicleMake);
@@ -20,5 +20,6 @@ namespace Project.Service.Interfaces
         void DeleteVehicleModel(int id);
         IPagedList<VehicleMake> GetSearchSortVehicleMake(string searchBy,string searchString, int? page, int pageSize, string sortBy);
         IPagedList<VehicleModel> GetSearchSortVehicleModel(string searchBy, string searchString, int? page, int pageSize, string sortBy);
+        List<VehicleMake> GetVehicleMakes();
     }
 }

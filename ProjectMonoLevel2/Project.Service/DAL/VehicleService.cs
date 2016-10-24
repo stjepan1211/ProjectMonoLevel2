@@ -8,12 +8,18 @@ using Project.Service.Models;
 using Project.Service.Interfaces;
 using PagedList.Mvc;
 using PagedList;
+using AutoMapper;
 
 namespace Project.Service.DAL
 {
-    public class VehicleService : IVehicle
+    public class VehicleService : IVehicleService
     {
-        VehicleContext db = new VehicleContext();
+        private readonly VehicleContext db;
+
+        public VehicleService()
+        {
+             db = new VehicleContext();
+        }
 
         public void CreateVehicleMake(VehicleMake vehicleMake)
         {
@@ -57,7 +63,6 @@ namespace Project.Service.DAL
             db.VehicleModels.Remove(vehicleModel);
             db.SaveChanges();
         }
-
         public IPagedList<VehicleMake> GetSearchSortVehicleMake(string searchBy, string searchString, int? page, int pageSize, string sortBy)
         {
             switch (searchBy)
@@ -66,36 +71,51 @@ namespace Project.Service.DAL
                     switch (sortBy)
                     {
                         case "Name desc":
-                            return db.VehicleMakes.Where(vmk => vmk.Name.StartsWith(searchString))
-                            .OrderByDescending(vmk => vmk.Name).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleMakes.Where(vmk => vmk.Name.Contains(searchString))
+                            .OrderByDescending(vmk => vmk.Name).ToPagedList(page ?? 1, pageSize);
                         case "Abrv desc":
-                            return db.VehicleMakes.Where(vmk => vmk.Name.StartsWith(searchString))
-                            .OrderByDescending(vmk => vmk.Abrv).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleMakes.Where(vmk => vmk.Name.Contains(searchString))
+                            .OrderByDescending(vmk => vmk.Abrv).ToPagedList(page ?? 1, pageSize);
                         case "Abrv":
-                            return db.VehicleMakes.Where(vmk => vmk.Name.StartsWith(searchString))
-                            .OrderBy(vmk => vmk.Abrv).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleMakes.Where(vmk => vmk.Name.Contains(searchString))
+                            .OrderBy(vmk => vmk.Abrv).ToPagedList(page ?? 1, pageSize);
                         default:
-                            return db.VehicleMakes.Where(vmk => vmk.Name.StartsWith(searchString))
-                            .OrderBy(vmk => vmk.Name).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleMakes.Where(vmk => vmk.Name.Contains(searchString))
+                            .OrderBy(vmk => vmk.Name).ToPagedList(page ?? 1, pageSize);
                     }
                 case "Abrv":
-                    switch(sortBy)
+                    switch (sortBy)
                     {
                         case "Name desc":
-                            return db.VehicleMakes.Where(vmk => vmk.Abrv.StartsWith(searchString))
-                            .OrderByDescending(vmk => vmk.Name).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleMakes.Where(vmk => vmk.Abrv.Contains(searchString))
+                            .OrderByDescending(vmk => vmk.Name).ToPagedList(page ?? 1, pageSize);
                         case "Abrv desc":
-                            return db.VehicleMakes.Where(vmk => vmk.Abrv.StartsWith(searchString))
-                            .OrderByDescending(vmk => vmk.Abrv).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleMakes.Where(vmk => vmk.Abrv.Contains(searchString))
+                            .OrderByDescending(vmk => vmk.Abrv).ToPagedList(page ?? 1, pageSize);
                         case "Abrv":
-                            return db.VehicleMakes.Where(vmk => vmk.Abrv.StartsWith(searchString))
-                            .OrderBy(vmk => vmk.Abrv).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleMakes.Where(vmk => vmk.Abrv.Contains(searchString))
+                            .OrderBy(vmk => vmk.Abrv).ToPagedList(page ?? 1, pageSize);
                         default:
-                            return db.VehicleMakes.Where(vmk => vmk.Abrv.StartsWith(searchString))
-                            .OrderBy(vmk => vmk.Name).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleMakes.Where(vmk => vmk.Abrv.Contains(searchString))
+                            .OrderBy(vmk => vmk.Name).ToPagedList(page ?? 1, pageSize);
                     }
                 default:
-                    return null;
+                    //dohvacanje entity-a ako korisnik nije upisao nista u textbox
+                    switch (sortBy)
+                    {
+                        case "Name desc":
+                            return db.VehicleMakes
+                            .OrderByDescending(vmk => vmk.Name).ToPagedList(page ?? 1, pageSize);
+                        case "Abrv desc":
+                            return db.VehicleMakes
+                            .OrderByDescending(vmk => vmk.Abrv).ToPagedList(page ?? 1, pageSize);
+                        case "Abrv":
+                            return db.VehicleMakes
+                            .OrderBy(vmk => vmk.Abrv).ToPagedList(page ?? 1, pageSize);
+                        default:
+                            return db.VehicleMakes
+                            .OrderBy(vmk => vmk.Name).ToPagedList(page ?? 1, pageSize);
+                    }
             }
             
         }
@@ -107,71 +127,98 @@ namespace Project.Service.DAL
                     switch (sortBy)
                     {
                         case "Maker desc":
-                            return db.VehicleModels.Where(vml => vml.VehicleMake.Name.StartsWith(searchString))
-                                .OrderByDescending(vml => vml.VehicleMake.Name).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleModels.Where(vml => vml.VehicleMake.Name.Contains(searchString))
+                                .OrderByDescending(vml => vml.VehicleMake.Name).ToPagedList(page ?? 1, pageSize);
                         case "Model desc":
-                            return db.VehicleModels.Where(vml => vml.VehicleMake.Name.StartsWith(searchString))
-                                .OrderByDescending(vml => vml.Name).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleModels.Where(vml => vml.VehicleMake.Name.Contains(searchString))
+                                .OrderByDescending(vml => vml.Name).ToPagedList(page ?? 1, pageSize);
                         case "Model":
-                            return db.VehicleModels.Where(vml => vml.VehicleMake.Name.StartsWith(searchString))
-                                .OrderBy(vml => vml.Name).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleModels.Where(vml => vml.VehicleMake.Name.Contains(searchString))
+                                .OrderBy(vml => vml.Name).ToPagedList(page ?? 1, pageSize);
                         case "Abrv desc":
-                            return db.VehicleModels.Where(vml => vml.VehicleMake.Name.StartsWith(searchString))
-                                .OrderByDescending(vml => vml.Abrv).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleModels.Where(vml => vml.VehicleMake.Name.Contains(searchString))
+                                .OrderByDescending(vml => vml.Abrv).ToPagedList(page ?? 1, pageSize);
                         case "Abrv":
-                            return db.VehicleModels.Where(vml => vml.VehicleMake.Name.StartsWith(searchString))
-                                .OrderBy(vml => vml.Abrv).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleModels.Where(vml => vml.VehicleMake.Name.Contains(searchString))
+                                .OrderBy(vml => vml.Abrv).ToPagedList(page ?? 1, pageSize);
                         default:
-                            return db.VehicleModels.Where(vml => vml.VehicleMake.Name.StartsWith(searchString))
-                                .OrderBy(vml => vml.VehicleMake.Name).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleModels.Where(vml => vml.VehicleMake.Name.Contains(searchString))
+                                .OrderBy(vml => vml.VehicleMake.Name).ToPagedList(page ?? 1, pageSize);
                     }
                 case "Name":
                     switch(sortBy)
                     {
                         case "Maker desc":
-                            return db.VehicleModels.Where(vml => vml.Name.StartsWith(searchString))
-                                .OrderByDescending(vml => vml.VehicleMake.Name).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleModels.Where(vml => vml.Name.Contains(searchString))
+                                .OrderByDescending(vml => vml.VehicleMake.Name).ToPagedList(page ?? 1, pageSize);
                         case "Model desc":
-                            return db.VehicleModels.Where(vml => vml.Name.StartsWith(searchString))
-                                .OrderByDescending(vml => vml.Name).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleModels.Where(vml => vml.Name.Contains(searchString))
+                                .OrderByDescending(vml => vml.Name).ToPagedList(page ?? 1, pageSize);
                         case "Model":
-                            return db.VehicleModels.Where(vml => vml.Name.StartsWith(searchString))
-                                .OrderBy(vml => vml.Name).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleModels.Where(vml => vml.Name.Contains(searchString))
+                                .OrderBy(vml => vml.Name).ToPagedList(page ?? 1, pageSize);
                         case "Abrv desc":
-                            return db.VehicleModels.Where(vml => vml.Name.StartsWith(searchString))
-                                .OrderByDescending(vml => vml.Abrv).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleModels.Where(vml => vml.Name.Contains(searchString))
+                                .OrderByDescending(vml => vml.Abrv).ToPagedList(page ?? 1, pageSize);
                         case "Abrv":
-                            return db.VehicleModels.Where(vml => vml.Name.StartsWith(searchString))
-                                .OrderBy(vml => vml.Abrv).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleModels.Where(vml => vml.Name.Contains(searchString))
+                                .OrderBy(vml => vml.Abrv).ToPagedList(page ?? 1, pageSize);
                         default:
-                            return db.VehicleModels.Where(vml => vml.Name.StartsWith(searchString))
-                                .OrderBy(vml => vml.VehicleMake.Name).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleModels.Where(vml => vml.Name.Contains(searchString))
+                                .OrderBy(vml => vml.VehicleMake.Name).ToPagedList(page ?? 1, pageSize);
                     }
                 case "Abrv":
                     switch (sortBy)
                     {
                         case "Maker desc":
-                            return db.VehicleModels.Where(vml => vml.Abrv.StartsWith(searchString))
-                                .OrderByDescending(vml => vml.VehicleMake.Name).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleModels.Where(vml => vml.Abrv.Contains(searchString))
+                                .OrderByDescending(vml => vml.VehicleMake.Name).ToPagedList(page ?? 1, pageSize);
                         case "Model desc":
-                            return db.VehicleModels.Where(vml => vml.Abrv.StartsWith(searchString))
-                                .OrderByDescending(vml => vml.Name).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleModels.Where(vml => vml.Abrv.Contains(searchString))
+                                .OrderByDescending(vml => vml.Name).ToPagedList(page ?? 1, pageSize);
                         case "Model":
-                            return db.VehicleModels.Where(vml => vml.Abrv.StartsWith(searchString))
-                                .OrderBy(vml => vml.Name).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleModels.Where(vml => vml.Abrv.Contains(searchString))
+                                .OrderBy(vml => vml.Name).ToPagedList(page ?? 1, pageSize);
                         case "Abrv desc":
-                            return db.VehicleModels.Where(vml => vml.Abrv.StartsWith(searchString))
-                                .OrderByDescending(vml => vml.Abrv).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleModels.Where(vml => vml.Abrv.Contains(searchString))
+                                .OrderByDescending(vml => vml.Abrv).ToPagedList(page ?? 1, pageSize);
                         case "Abrv":
-                            return db.VehicleModels.Where(vml => vml.Abrv.StartsWith(searchString))
-                                .OrderBy(vml => vml.Abrv).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleModels.Where(vml => vml.Abrv.Contains(searchString))
+                                .OrderBy(vml => vml.Abrv).ToPagedList(page ?? 1, pageSize);
                         default:
-                            return db.VehicleModels.Where(vml => vml.Abrv.StartsWith(searchString))
-                                .OrderBy(vml => vml.VehicleMake.Name).ToList().ToPagedList(page ?? 1, pageSize);
+                            return db.VehicleModels.Where(vml => vml.Abrv.Contains(searchString))
+                                .OrderBy(vml => vml.VehicleMake.Name).ToPagedList(page ?? 1, pageSize);
                     }
                 default:
-                    return null;
-            }
+                    //dohvacanje entity-a ako korisnik nije upisao nista u textbox
+                    switch (sortBy)
+                    {
+                        case "Maker desc":
+                            return db.VehicleModels
+                                .OrderByDescending(vml => vml.VehicleMake.Name).ToPagedList(page ?? 1, pageSize);
+                        case "Model desc":
+                            return db.VehicleModels
+                                .OrderByDescending(vml => vml.Name).ToPagedList(page ?? 1, pageSize);
+                        case "Model":
+                            return db.VehicleModels
+                                .OrderBy(vml => vml.Name).ToPagedList(page ?? 1, pageSize);
+                        case "Abrv desc":
+                            return db.VehicleModels
+                                .OrderByDescending(vml => vml.Abrv).ToPagedList(page ?? 1, pageSize);
+                        case "Abrv":
+                            return db.VehicleModels
+                                .OrderBy(vml => vml.Abrv).ToPagedList(page ?? 1, pageSize);
+                        default:
+                            return db.VehicleModels
+                                .OrderBy(vml => vml.VehicleMake.Name).ToPagedList(page ?? 1, pageSize);
+                    }
+                }
+        }
+        //funkcija se koristi kod CRUD-a za VehicleModel
+        //kada korisnik bira proizvodaca po VehicleMakeId
+        public List<VehicleMake> GetVehicleMakes()
+        {
+            return db.VehicleMakes.ToList();
         }
     }
 }

@@ -14,23 +14,22 @@ namespace Project.MVC.Controllers
 {
     public class VehicleMakeController : Controller
     {
-        private VehicleService db = new VehicleService();
         private const int PageSize = 4;
+        private readonly VehicleService vehicleService = new VehicleService(); 
+
         // GET: VehicleMake
         public ActionResult Index(string searchBy, string searchString, int? page, string sortBy)
         {
-            //object for populate list with all vehicle makers
-            VehicleMakeBusinessLayer vmkbl = new VehicleMakeBusinessLayer();
             ViewBag.SortName = string.IsNullOrEmpty(sortBy) ? "Name desc" : "";
             ViewBag.SortAbrv = sortBy == "Abrv" ? "Abrv desc" : "Abrv";
 
             if (searchString == null)
             {
-                return View(vmkbl.GetVehicleMakesPagedSorted(page, PageSize,sortBy));
+                return View(vehicleService.GetSearchSortVehicleMake("", "", page, PageSize, sortBy));
             }
             else
             {
-                return View(db.GetSearchSortVehicleMake(searchBy, searchString, page, PageSize, sortBy));
+                return View(vehicleService.GetSearchSortVehicleMake(searchBy, searchString, page, PageSize, sortBy));
             }   
         }
 
@@ -41,7 +40,7 @@ namespace Project.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VehicleMake vehicleMake = db.FindVehicleMakeById(Convert.ToInt32(id));
+            VehicleMake vehicleMake = vehicleService.FindVehicleMakeById(Convert.ToInt32(id));
             if (vehicleMake == null)
             {
                 return HttpNotFound();
@@ -64,8 +63,12 @@ namespace Project.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.CreateVehicleMake(vehicleMake);
+                vehicleService.CreateVehicleMake(vehicleMake);
                 return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Krivo unesen maker");
             }
             return View(vehicleMake);
         }
@@ -77,7 +80,7 @@ namespace Project.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VehicleMake vehicleMake = db.FindVehicleMakeById(Convert.ToInt32(id));
+            VehicleMake vehicleMake = vehicleService.FindVehicleMakeById(Convert.ToInt32(id));
             if (vehicleMake == null)
             {
                 return HttpNotFound();
@@ -94,7 +97,7 @@ namespace Project.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.UpdateVehicleMake(vehicleMake);
+                vehicleService.UpdateVehicleMake(vehicleMake);
                 return RedirectToAction("Index");
             }
             return View(vehicleMake);
@@ -107,7 +110,7 @@ namespace Project.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VehicleMake vehicleMake = db.FindVehicleMakeById(Convert.ToInt32(id));
+            VehicleMake vehicleMake = vehicleService.FindVehicleMakeById(Convert.ToInt32(id));
             if (vehicleMake == null)
             {
                 return HttpNotFound();
@@ -120,7 +123,7 @@ namespace Project.MVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            db.DeleteVehicleMake(id);
+            vehicleService.DeleteVehicleMake(id);
             return RedirectToAction("Index");
         }
     }
