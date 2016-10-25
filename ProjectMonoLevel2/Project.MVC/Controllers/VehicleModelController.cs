@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Project.Service.DAL;
 using Project.Service.Models;
-
+using Project.Service.ViewModels;
 
 namespace Project.MVC.Controllers
 {
@@ -23,7 +23,7 @@ namespace Project.MVC.Controllers
             ViewBag.SortModel = sortBy == "Model" ? "Model desc" : "Model";
             ViewBag.SortAbrv = sortBy == "Abrv" ? "Abrv desc" : "Abrv";
             
-            if (searchBy == null)
+            if (searchString == null)
             {
                 return View(vehicleService.GetSearchSortVehicleModel("","",page, PageSize, sortBy));
             }
@@ -40,7 +40,7 @@ namespace Project.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VehicleModel vehicleModel = vehicleService.FindVehicleModelById(Convert.ToInt32(id));
+            VehicleModelViewModel vehicleModel = vehicleService.FindVehicleModelById(Convert.ToInt32(id));
             if (vehicleModel == null)
             {
                 return HttpNotFound();
@@ -60,16 +60,16 @@ namespace Project.MVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "VehicleModelId,VehicleMakeId,Name,Abrv")] VehicleModel vehicleModel)
+        public ActionResult Create([Bind(Include = "VehicleModelId,VehicleMakeId,Name,Abrv")] VehicleModelViewModel vehicleModelView)
         {
             if (ModelState.IsValid)
             {
-                vehicleService.CreateVehicleModel(vehicleModel);
+                vehicleService.CreateVehicleModel(vehicleModelView);
                 return RedirectToAction("Index");
             }
 
-            ViewBag.VehicleMakeId = new SelectList(vehicleService.GetVehicleMakes(), "VehicleMakeId", "Name", vehicleModel.VehicleMakeId);
-            return View(vehicleModel);
+            ViewBag.VehicleMakeId = new SelectList(vehicleService.GetVehicleMakes(), "VehicleMakeId", "Name", vehicleModelView.VehicleMakeId);
+            return View(vehicleModelView);
         }
 
         // GET: VehicleModel/Edit/5
@@ -79,13 +79,13 @@ namespace Project.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VehicleModel vehicleModel = vehicleService.FindVehicleModelById(Convert.ToInt32(id));
-            if (vehicleModel == null)
+            VehicleModelViewModel vehicleModelView = vehicleService.FindVehicleModelById(Convert.ToInt32(id));
+            if (vehicleModelView == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.VehicleMakeId = new SelectList(vehicleService.GetVehicleMakes(), "VehicleMakeId", "Name", vehicleModel.VehicleMakeId);
-            return View(vehicleModel);
+            ViewBag.VehicleMakeId = new SelectList(vehicleService.GetVehicleMakes(), "VehicleMakeId", "Name", vehicleModelView.VehicleMakeId);
+            return View(vehicleModelView);
         }
 
         // POST: VehicleModel/Edit/5
@@ -93,15 +93,15 @@ namespace Project.MVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "VehicleModelId,VehicleMakeId,Name,Abrv")] VehicleModel vehicleModel)
+        public ActionResult Edit([Bind(Include = "VehicleModelId,VehicleMakeId,Name,Abrv")] VehicleModelViewModel vehicleModelView)
         {
             if (ModelState.IsValid)
             {
-                vehicleService.UpdateVehicleModel(vehicleModel);
+                vehicleService.UpdateVehicleModel(vehicleModelView);
                 return RedirectToAction("Index");
             }
-            ViewBag.VehicleMakeId = new SelectList(vehicleService.GetVehicleMakes(), "VehicleMakeId", "Name", vehicleModel.VehicleMakeId);
-            return View(vehicleModel);
+            ViewBag.VehicleMakeId = new SelectList(vehicleService.GetVehicleMakes(), "VehicleMakeId", "Name", vehicleModelView.VehicleMakeId);
+            return View(vehicleModelView);
         }
 
         // GET: VehicleModel/Delete/5
@@ -111,12 +111,12 @@ namespace Project.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VehicleModel vehicleModel = vehicleService.FindVehicleModelById(Convert.ToInt32(id));
-            if (vehicleModel == null)
+            VehicleModelViewModel vehicleModelView = vehicleService.FindVehicleModelById(Convert.ToInt32(id));
+            if (vehicleModelView == null)
             {
                 return HttpNotFound();
             }
-            return View(vehicleModel);
+            return View(vehicleModelView);
         }
 
         // POST: VehicleModel/Delete/5

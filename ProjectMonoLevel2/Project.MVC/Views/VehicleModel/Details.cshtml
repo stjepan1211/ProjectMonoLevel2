@@ -1,4 +1,4 @@
-﻿@model Project.Service.Models.VehicleModel
+﻿@model Project.Service.ViewModels.VehicleModelViewModel
 
 @{
     ViewBag.Title = "Details";
@@ -15,7 +15,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.VehicleMake.Name)
+            @Html.DisplayFor(model => model.VehicleMakeName)
         </dd>
 
         <dt>

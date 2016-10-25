@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Project.Service.DAL;
 using Project.Service.Models;
-
+using Project.Service.ViewModels;
 
 namespace Project.MVC.Controllers
 {
@@ -40,7 +40,7 @@ namespace Project.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VehicleMake vehicleMake = vehicleService.FindVehicleMakeById(Convert.ToInt32(id));
+            VehicleMakeViewModel vehicleMake = vehicleService.FindVehicleMakeById(Convert.ToInt32(id));
             if (vehicleMake == null)
             {
                 return HttpNotFound();
@@ -59,18 +59,18 @@ namespace Project.MVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "VehicleMakeId,Name,Abrv")] VehicleMake vehicleMake)
+        public ActionResult Create([Bind(Include = "VehicleMakeId,Name,Abrv")] VehicleMakeViewModel vehicleMakeView)
         {
             if (ModelState.IsValid)
             {
-                vehicleService.CreateVehicleMake(vehicleMake);
+                vehicleService.CreateVehicleMake(vehicleMakeView);
                 return RedirectToAction("Index");
             }
             else
             {
                 ModelState.AddModelError("", "Krivo unesen maker");
             }
-            return View(vehicleMake);
+            return View(vehicleMakeView);
         }
 
         // GET: VehicleMake/Edit/5
@@ -80,7 +80,7 @@ namespace Project.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VehicleMake vehicleMake = vehicleService.FindVehicleMakeById(Convert.ToInt32(id));
+            VehicleMakeViewModel vehicleMake = vehicleService.FindVehicleMakeById(Convert.ToInt32(id));
             if (vehicleMake == null)
             {
                 return HttpNotFound();
@@ -93,14 +93,14 @@ namespace Project.MVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "VehicleMakeId,Name,Abrv")] VehicleMake vehicleMake)
+        public ActionResult Edit([Bind(Include = "VehicleMakeId,Name,Abrv")] VehicleMakeViewModel vehicleMakeView)
         {
             if (ModelState.IsValid)
             {
-                vehicleService.UpdateVehicleMake(vehicleMake);
+                vehicleService.UpdateVehicleMake(vehicleMakeView);
                 return RedirectToAction("Index");
             }
-            return View(vehicleMake);
+            return View(vehicleMakeView);
         }
 
         // GET: VehicleMake/Delete/5
@@ -110,7 +110,7 @@ namespace Project.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VehicleMake vehicleMake = vehicleService.FindVehicleMakeById(Convert.ToInt32(id));
+            VehicleMakeViewModel vehicleMake = vehicleService.FindVehicleMakeById(Convert.ToInt32(id));
             if (vehicleMake == null)
             {
                 return HttpNotFound();

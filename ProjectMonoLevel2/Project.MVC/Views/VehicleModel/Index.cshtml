@@ -1,7 +1,7 @@
 ﻿@using PagedList;
 @using PagedList.Mvc;
 
-@model IPagedList<Project.Service.Models.VehicleModel>
+@model IPagedList<Project.Service.ViewModels.VehicleModelViewModel>
 
 @{
     ViewBag.Title = "Index";
@@ -62,7 +62,7 @@ else
     {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.VehicleMake.Name)
+            @Html.DisplayFor(modelItem => item.VehicleMakeName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Name)
