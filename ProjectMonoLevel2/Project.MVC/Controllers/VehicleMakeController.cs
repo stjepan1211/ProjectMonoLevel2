@@ -15,7 +15,11 @@ namespace Project.MVC.Controllers
     public class VehicleMakeController : Controller
     {
         private const int PageSize = 4;
-        private readonly VehicleService vehicleService = new VehicleService(); 
+        private readonly VehicleService vehicleService; 
+        public VehicleMakeController()
+        {
+            vehicleService = VehicleService.GetInstance();
+        }
 
         // GET: VehicleMake
         public ActionResult Index(string searchBy, string searchString, int? page, string sortBy)
@@ -34,13 +38,13 @@ namespace Project.MVC.Controllers
         }
 
         // GET: VehicleMake/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VehicleMakeViewModel vehicleMake = vehicleService.FindVehicleMakeById(Convert.ToInt32(id));
+            VehicleMakeViewModel vehicleMake = vehicleService.FindVehicleMakeById((Guid)id);
             if (vehicleMake == null)
             {
                 return HttpNotFound();
@@ -74,13 +78,13 @@ namespace Project.MVC.Controllers
         }
 
         // GET: VehicleMake/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VehicleMakeViewModel vehicleMake = vehicleService.FindVehicleMakeById(Convert.ToInt32(id));
+            VehicleMakeViewModel vehicleMake = vehicleService.FindVehicleMakeById((Guid)id);
             if (vehicleMake == null)
             {
                 return HttpNotFound();
@@ -104,13 +108,13 @@ namespace Project.MVC.Controllers
         }
 
         // GET: VehicleMake/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VehicleMakeViewModel vehicleMake = vehicleService.FindVehicleMakeById(Convert.ToInt32(id));
+            VehicleMakeViewModel vehicleMake = vehicleService.FindVehicleMakeById((Guid)id);
             if (vehicleMake == null)
             {
                 return HttpNotFound();
@@ -121,7 +125,7 @@ namespace Project.MVC.Controllers
         // POST: VehicleMake/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(Guid id)
         {
             vehicleService.DeleteVehicleMake(id);
             return RedirectToAction("Index");

@@ -14,8 +14,14 @@ namespace Project.MVC.Controllers
 {
     public class VehicleModelController : Controller
     {
-        private readonly VehicleService vehicleService = new VehicleService();
+        private readonly VehicleService vehicleService;
         private const int PageSize = 4;
+
+        public VehicleModelController()
+        {
+            vehicleService = VehicleService.GetInstance();
+        }
+
         // GET: VehicleModel
         public ActionResult Index(string searchBy, string searchString, int? page, string sortBy)
         {
@@ -34,13 +40,13 @@ namespace Project.MVC.Controllers
         }
 
         // GET: VehicleModel/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VehicleModelViewModel vehicleModel = vehicleService.FindVehicleModelById(Convert.ToInt32(id));
+            VehicleModelViewModel vehicleModel = vehicleService.FindVehicleModelById((Guid)id);
             if (vehicleModel == null)
             {
                 return HttpNotFound();
@@ -73,13 +79,13 @@ namespace Project.MVC.Controllers
         }
 
         // GET: VehicleModel/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VehicleModelViewModel vehicleModelView = vehicleService.FindVehicleModelById(Convert.ToInt32(id));
+            VehicleModelViewModel vehicleModelView = vehicleService.FindVehicleModelById((Guid)id);
             if (vehicleModelView == null)
             {
                 return HttpNotFound();
@@ -105,13 +111,13 @@ namespace Project.MVC.Controllers
         }
 
         // GET: VehicleModel/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VehicleModelViewModel vehicleModelView = vehicleService.FindVehicleModelById(Convert.ToInt32(id));
+            VehicleModelViewModel vehicleModelView = vehicleService.FindVehicleModelById((Guid)id);
             if (vehicleModelView == null)
             {
                 return HttpNotFound();
@@ -122,9 +128,9 @@ namespace Project.MVC.Controllers
         // POST: VehicleModel/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(Guid id)
         {
-            vehicleService.DeleteVehicleModel(id);
+            vehicleService.DeleteVehicleModel((Guid)id);
             return RedirectToAction("Index");
         }
 

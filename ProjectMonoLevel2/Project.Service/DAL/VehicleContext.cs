@@ -11,8 +11,15 @@ namespace Project.Service.DAL
 {
     public class VehicleContext : DbContext
     {
-        public VehicleContext() : base("VehicleContext")
+        private static VehicleContext Instance;
+        private VehicleContext() : base("VehicleContext")
         {
+        }
+        public static VehicleContext GetInstance()
+        {
+            if (Instance == null)
+                Instance = new VehicleContext();
+            return Instance;
         }
         public DbSet<VehicleMake> VehicleMakes { get; set; }
         public DbSet<VehicleModel> VehicleModels { get; set; }

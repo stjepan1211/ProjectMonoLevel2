@@ -13,12 +13,12 @@ namespace Project.Service.Interfaces
     {
         void CreateVehicleMake(VehicleMakeViewModel vehicleMakeView);
         void UpdateVehicleMake(VehicleMakeViewModel vehicleMakeView);
-        VehicleMakeViewModel FindVehicleMakeById(int id);
-        void DeleteVehicleMake(int id);
+        VehicleMakeViewModel FindVehicleMakeById(Guid id);
+        void DeleteVehicleMake(Guid id);
         void CreateVehicleModel(VehicleModelViewModel vehicleModel);
-        VehicleModelViewModel FindVehicleModelById(int id);
+        VehicleModelViewModel FindVehicleModelById(Guid id);
         void UpdateVehicleModel(VehicleModelViewModel vehicleModel);
-        void DeleteVehicleModel(int id);
+        void DeleteVehicleModel(Guid id);
         IPagedList<VehicleMakeViewModel> GetSearchSortVehicleMake(string searchBy,string searchString, int? page, int pageSize, string sortBy);
         IPagedList<VehicleModelViewModel> GetSearchSortVehicleModel(string searchBy, string searchString, int? page, int pageSize, string sortBy);
         List<VehicleMake> GetVehicleMakes();
